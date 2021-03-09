@@ -1,0 +1,26 @@
+.profile__settings{
+    width:24px;
+    height:24px;
+    margin: 0 0 9px 18px;
+    padding:0;
+    object-fit: scale-down;
+    border: solid white 1px;
+    cursor: pointer;
+    align-self: center;
+    background-image: url(../../../images/pen.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+}
+.profile__settings:hover{
+    animation: opacity linear 0.3s forwards;
+    }
+    
+
+@media screen and (max-width:400px){
+    .profile__settings{
+        width:18px;
+        height:18px;
+        max-width: 220px;
+    }
+}
