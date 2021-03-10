@@ -2,6 +2,8 @@
   "name": "mesto-react",
   "version": "0.1.0",
   "private": true,
+  "author": "Marina <deos.y@yandex.ru>",
+  "description": "project like Insta created with react",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -12,6 +14,8 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
+    "predeploy": "npm start",
+    "deploy": "gh-pages -d dist",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -34,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0"
   }
 }

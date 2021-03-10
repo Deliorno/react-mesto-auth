@@ -1,5 +1,5 @@
 import api from "../utils/Api";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Card from "./Card.js";
 function Main(porps){
     const [userAvatar, setUserAvatar] = React.useState([])
@@ -34,27 +34,27 @@ function Main(porps){
     },[])
     return(
         <main className="content">
-        <section className="profile">
-            <div className="profile__info">
-                <div className="profile__avatar-overlay" onClick={porps.onEditAvatar}></div>  
-                <img alt="Автар" style={{ backgroundImage: `url(${userAvatar})` }}  className="profile__avatar"/>
-                <div className="profile__text-info">
-                    <div className="profile__row">
-                        <h1 className="profile__name" id="profile__name">{userName}</h1>
-                        <button type="button" className="profile__settings" onClick={porps.onEditProfile} id="settings"></button>
-                    </div>
-                    <p className="profile__status" id="profile__status">{userDescription}</p>
-                </div> 
-            </div>
-            <button type="button" id="add_btn" className="profile__add-btn" onClick={porps.onAddPlace }></button>
-        </section>
-        <section className="gallery">
-            {cards.map((card)=>{
-                return(
-                    <Card card={card} key={card.id} onCardClick={porps.onCardClick} ></Card>
-                    )
-            })}
-        </section>
+            <section className="profile">
+                <div className="profile__info">
+                    <div className="profile__avatar-overlay" onClick={porps.onEditAvatar}/> 
+                    <div style={{ backgroundImage: `url(${userAvatar})` }}  className="profile__avatar"/>
+                    <div className="profile__text-info">
+                        <div className="profile__row">
+                            <h1 className="profile__name" id="profile__name">{userName}</h1>
+                            <button type="button" className="profile__settings" onClick={porps.onEditProfile} id="settings"/>
+                        </div>
+                        <p className="profile__status" id="profile__status">{userDescription}</p>
+                    </div> 
+                </div>
+                <button type="button" id="add_btn" className="profile__add-btn" onClick={porps.onAddPlace }/>
+            </section>
+            <section className="gallery">
+                {cards.map((card)=>{
+                    return(
+                        <Card card={card} key={card.id} onCardClick={porps.onCardClick}/>
+                        )
+                })}
+            </section>
     </main>
     )
 }
