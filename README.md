@@ -1,8 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-# Project on GH pages
+# Mesto created with react on GH pages
 
 https://deliorno.github.io/mesto-react/
 
