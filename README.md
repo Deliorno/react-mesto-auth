@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Project on GH pages
+
+https://deliorno.github.io/mesto-react/
+
 ## Available Scripts
 
 In the project directory, you can run:
