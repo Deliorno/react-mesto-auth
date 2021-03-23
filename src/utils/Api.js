@@ -40,7 +40,7 @@ import React from "react";
              console.log(err)})
      }
 
-     addUserInfo(data){
+     setUserInfo(data){
         return fetch(this._urlUserInfo, {
             method: 'PATCH',
             headers: this._headers,
@@ -76,6 +76,38 @@ import React from "react";
         })
          .catch((err)=>{
              console.log(err)})
+     }
+
+     changeLikeCardStatus(cardId, isLiked){
+         if(isLiked){
+            return fetch(`${this._urlCards}likes/${cardId}`, {
+                method: 'PUT',
+                headers: this._headers
+              }) 
+              .then((res) => {
+                if (res.ok){
+                    console.log(res)
+                    return res.json();  
+                }
+                return Promise.reject(`Ошибка: ${res.status}`);
+            })
+             .catch((err)=>{
+                 console.log(err)})
+         } else {
+            return fetch(`${this._urlCards}likes/${cardId}`, {
+                method: 'DELETE',
+                headers: this._headers
+              }) 
+              .then((res) => {
+                if (res.ok){
+                    console.log(res)
+                    return res.json();
+                }
+                return Promise.reject(`Ошибка: ${res.status}`);
+            })
+             .catch((err)=>{
+                 console.log(err)})
+         }
      }
 
      deleteCard(cardId){
