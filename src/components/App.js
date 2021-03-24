@@ -4,7 +4,7 @@ import '../index.css';
 import Header from './Header.js';
 import Footer from './Footer.js';
 import Main from './Main.js';
-import api from "../utils/Api";
+import api from "../utils/api";
 import ImagePopup from './ImagePopup.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
