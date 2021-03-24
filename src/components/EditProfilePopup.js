@@ -32,21 +32,21 @@ function EditProfilePopup(props){
 
     React.useEffect(() => {
         function resetFields(){
-            nameRef.current.value="";
-            aboutRef.current.value="";
-            setNameErrorMessage({errorMessage:'', isValid:false});
-            setJobErrorMessage({errorMessage:'', isValid:false})
+            nameRef.current.value=name;
+            aboutRef.current.value=description;
+            setNameErrorMessage({errorMessage:'', isValid:true});
+            setJobErrorMessage({errorMessage:'', isValid:true})
           }
         resetFields()
       }, [props.isOpen])
 
     function handleNameChange(e) {
-    setName(e.target.value);
+    //setName(e.target.value);
     setNameErrorMessage({errorMessage:e.target.validationMessage, isValid:e.target.checkValidity()})
    // fromValidity()
 }
 function handleAboutChange(e) {
-    setDescription(e.target.value);
+    //setDescription(e.target.value);
     setJobErrorMessage({errorMessage:e.target.validationMessage, isValid:e.target.checkValidity()})
 }
 
@@ -55,8 +55,8 @@ function handleSubmit(e){
     e.preventDefault();
     // Передаём значения управляемых компонентов во внешний обработчик
     props.onUpdateUser({
-        name: name,
-        about: description,
+        name: nameRef.current.value,
+        about: aboutRef.current.value,
     });
 }
 
