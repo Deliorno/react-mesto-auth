@@ -20,11 +20,7 @@ function EditProfilePopup(props){
 
     React.useEffect(() => {
         function fromValidity(){
-            if((nameErrorMessage.isValid && jobErrorMessage.isValid) === true){
-                setIsValid(true)
-            } else {
-                setIsValid(false)
-            }
+            setIsValid(nameErrorMessage.isValid && jobErrorMessage.isValid)
         }
 
         fromValidity()

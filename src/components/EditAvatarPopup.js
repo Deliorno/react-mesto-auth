@@ -9,11 +9,7 @@ function EditAvatarPopup(props){
     React.useEffect(() => {
       function fromValidity(){
         console.log(avatarErrorMessage.isValid,avatarErrorMessage.errorMessage)
-        if(avatarErrorMessage.isValid === true){
-            setIsValid(true)
-        } else {
-            setIsValid(false)
-        }
+        setIsValid(avatarErrorMessage.isValid)
     }
 
       fromValidity()

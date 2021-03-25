@@ -17,11 +17,7 @@ const [isValid, setIsValid] = React.useState(false);
 
     React.useEffect(() => {
         function fromValidity(){
-        if((placeErrorMessage.isValid && linkErrorMessage.isValid) === true){
-            setIsValid(true)
-        } else {
-            setIsValid(false)
-        }
+            setIsValid(placeErrorMessage.isValid && linkErrorMessage.isValid);
     }
       fromValidity()
 

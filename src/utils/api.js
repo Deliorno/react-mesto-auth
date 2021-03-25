@@ -1,7 +1,16 @@
-import React from "react";
- class Api extends React.Component{
-    constructor(props) {
-      super(props);
+const handleOriginalResponse = (res) => {
+        if (res.ok){
+            //console.log(res)
+            return res.json();  
+        }
+        return Promise.reject(`Ошибка: ${res.status}`)
+        .catch((err)=>{
+         console.log(err)})
+  }
+
+class Api {
+    constructor() {
+      //super(props);
         this._urlCards = "https://mesto.nomoreparties.co/v1/cohort-20/cards/";
         this._urlUserInfo = "https://mesto.nomoreparties.co/v1/cohort-20/users/me/";
         this._headers = {
@@ -84,29 +93,13 @@ import React from "react";
                 method: 'PUT',
                 headers: this._headers
               }) 
-              .then((res) => {
-                if (res.ok){
-                    console.log(res)
-                    return res.json();  
-                }
-                return Promise.reject(`Ошибка: ${res.status}`);
-            })
-             .catch((err)=>{
-                 console.log(err)})
+              .then(handleOriginalResponse)
          } else {
             return fetch(`${this._urlCards}likes/${cardId}`, {
                 method: 'DELETE',
                 headers: this._headers
               }) 
-              .then((res) => {
-                if (res.ok){
-                    console.log(res)
-                    return res.json();
-                }
-                return Promise.reject(`Ошибка: ${res.status}`);
-            })
-             .catch((err)=>{
-                 console.log(err)})
+              .then(handleOriginalResponse)
          }
      }
 
@@ -118,37 +111,6 @@ import React from "react";
           .then((res) => {
             if (res.ok){
                 console.log(res)
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
-     }
-
-     putLike(cardId){
-        return fetch(`${this._urlCards}likes/${cardId}`, {
-            method: 'PUT',
-            headers: this._headers
-          }) 
-          .then((res) => {
-            if (res.ok){
-                console.log(res)
-                return res.json();  
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
-     }
-
-     deleteLike(cardId){
-        return fetch(`${this._urlCards}likes/${cardId}`, {
-            method: 'DELETE',
-            headers: this._headers
-          }) 
-          .then((res) => {
-            if (res.ok){
                 return res.json();
             }
             return Promise.reject(`Ошибка: ${res.status}`);

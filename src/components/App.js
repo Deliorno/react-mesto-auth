@@ -2,6 +2,7 @@
 //import './App.css';
 import '../index.css';
 import Header from './Header.js';
+import '../index.css';
 import Footer from './Footer.js';
 import Main from './Main.js';
 import api from "../utils/api";
@@ -19,23 +20,14 @@ function App() {
     const [isAddPlacePopupOpen,setAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen,setEditAvatarPopupOpen] = React.useState(false);
     const [isConfirmPopupOpen,setConfirmPopupOpen] = React.useState(false);
-    const [selectedCard, setSelectedCard] = React.useState(false);
-    const [cardToDelete, setCardToDelete] = React.useState(false);
+    const [selectedCard, setSelectedCard] = React.useState('');
+    const [cardToDelete, setCardToDelete] = React.useState(null);
     const [cards, setCards] = React.useState([])
 
     useEffect(()=>{
         api.getData()
             .then((cardsData)=> {
-                const card = cardsData.map(card => {
-                    return{
-                        _id: card._id,
-                        name: card.name,
-                        likes: card.likes,
-                        link: card.link,
-                        owner: {_id: card.owner._id}
-                    } 
-                });
-                setCards(card);
+                setCards(cardsData);
             })
     },[]);
 
@@ -46,6 +38,7 @@ function App() {
         // Отправляем запрос в API и получаем обновлённые данные карточки
         api.changeLikeCardStatus(card._id, !isLiked)
         .then((newCard) => {
+            console.log(newCard);
             const newCards = cards.map((c) => c._id === card._id ? newCard : c)
             setCards(newCards)
             });
@@ -58,31 +51,18 @@ function App() {
 
     function confirmDeleteCard(e){
         e.preventDefault();
-        console.log(cardToDelete)
          api.deleteCard(cardToDelete._id)
         .then((resp) => {
-            //console.log(resp)
-            });
-        api.getData()
-        .then((cardsRefreshed)=> {
-            const newCards = cardsRefreshed.filter(cardR => cardR._id !== cardToDelete._id);
+            const newCards = cards.filter(cardR => cardR._id !== cardToDelete._id);
             setCards(newCards);
             closeAllPopups();
-        })
+            });
     }
 
     useEffect(()=>{
         api.getUserInfo()
         .then((userInfo)=> {
-            const cardsData = ()=>{
-                return{
-                    _id: userInfo._id,
-                    name: userInfo.name,
-                    avatar: userInfo.avatar,
-                    about: userInfo.about
-                }    
-            };
-           setCurrentUser(cardsData());
+           setCurrentUser(userInfo);
         })
    },[])
 
@@ -113,9 +93,10 @@ function App() {
     }
 
     function handleUpdateUser(data){
-        api.setUserInfo(data).then((resp)=> {
-            setCurrentUser(resp)})
-            closeAllPopups()
+        api.setUserInfo(data)
+        .then((resp)=> {
+            setCurrentUser(resp);
+            closeAllPopups()})
     }
 
     function handleUpdateAvatar(data){
@@ -136,8 +117,9 @@ function App() {
     }
 
     function overlayClose(e){
-        if((isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen) === true){
-            if(String(e.target.classList) === 'popup popup_display_flex'){
+        console.log(e.target)
+        if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen){
+            if(e.target.classList.contains('popup')){
             closeAllPopups();
         }
         }
@@ -146,7 +128,7 @@ function App() {
 
     function escapeClose(e){
         console.log(e.key)
-        if((isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen) === true){
+        if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen){
             if(e.key === 'Escape'){
             closeAllPopups();
             }
@@ -156,12 +138,9 @@ function App() {
 
   return (
 <CurrentUserContext.Provider value={currentUser}>
-<header>
     <meta charSet="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="./index.css"/>
     <title>Mesto</title>
-</header>
 <div className="main" onKeyDown={escapeClose} onClick={overlayClose}>
     <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
     <EditAvatarPopup onUpdateAvatar ={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
