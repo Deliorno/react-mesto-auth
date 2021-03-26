@@ -11,7 +11,6 @@ function EditAvatarPopup(props){
         console.log(avatarErrorMessage.isValid,avatarErrorMessage.errorMessage)
         setIsValid(avatarErrorMessage.isValid)
     }
-
       fromValidity()
     }, [avatarErrorMessage])
 
@@ -20,13 +19,11 @@ function EditAvatarPopup(props){
         avatar.current.value="";
         setAvatarErrorMessage({errorMessage:'', isValid:false});
       }
-      
       resetFields()
     }, [props.isOpen])
     
     function handleSubmit(e) {
         e.preventDefault();
-      
         props.onUpdateAvatar({
           avatar: avatar.current.value,
         });

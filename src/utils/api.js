@@ -24,14 +24,7 @@ class Api {
             method: 'GET',
             headers: this._headers
         })
-        .then((res) => {
-            if (res.ok){
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .catch((err)=>{
-            console.log(err)})
+        .then(handleOriginalResponse)
     }
 
     getUserInfo(){
@@ -39,14 +32,7 @@ class Api {
              method: 'GET',
              headers: this._headers
          })
-         .then((res) => {
-            if (res.ok){
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
+         .then(handleOriginalResponse)
      }
 
      setUserInfo(data){
@@ -58,14 +44,7 @@ class Api {
               about: data.about
             })
           }) 
-          .then((res) => {
-            if (res.ok){
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
+          .then(handleOriginalResponse)
      }
 
      addNewCard(data){
@@ -77,14 +56,7 @@ class Api {
               link: data.link
             })
           }) 
-          .then((res) => {
-            if (res.ok){
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
+          .then(handleOriginalResponse)
      }
 
      changeLikeCardStatus(cardId, isLiked){
@@ -108,15 +80,7 @@ class Api {
             method: 'DELETE',
             headers: this._headers
           }) 
-          .then((res) => {
-            if (res.ok){
-                console.log(res)
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
+          .then(handleOriginalResponse)
      }
 
      addAvatar(link){
@@ -127,14 +91,7 @@ class Api {
               avatar: link,
             })
           }) 
-          .then((res) => {
-            if (res.ok){
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        })
-         .catch((err)=>{
-             console.log(err)})
+          .then(handleOriginalResponse)
      }
 }
 const api = new Api();

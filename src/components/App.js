@@ -76,7 +76,7 @@ function App() {
         setEditAvatarPopupOpen(false);
         setEditProfilePopupOpen(false);
         setAddPlacePopupOpen(false);
-        setSelectedCard(false);
+        setSelectedCard('');
         setConfirmPopupOpen(false);
     }
 
@@ -101,7 +101,7 @@ function App() {
 
     function handleUpdateAvatar(data){
         api.addAvatar(data.avatar).then((resp)=> {
-            console.log(resp);
+            //console.log(resp);
             setCurrentUser(resp)
             closeAllPopups();
         })
@@ -110,15 +110,16 @@ function App() {
     function handleAddPlaceSubmit(data){
         api.addNewCard(data)
         .then((resp)=>{
-            console.log(resp);
+            //console.log(resp);
             setCards([resp, ...cards]);
             closeAllPopups();
         })
     }
 
     function overlayClose(e){
-        console.log(e.target)
-        if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen){
+        //console.log(e.target)
+        if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen || selectedCard){
+            //console.log(e.target);
             if(e.target.classList.contains('popup')){
             closeAllPopups();
         }
@@ -127,13 +128,10 @@ function App() {
     }
 
     function escapeClose(e){
-        console.log(e.key)
-        if(isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isConfirmPopupOpen){
+        //console.log(e.key)
             if(e.key === 'Escape'){
             closeAllPopups();
             }
-        }
-        
     }
 
   return (
@@ -141,7 +139,7 @@ function App() {
     <meta charSet="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Mesto</title>
-<div className="main" onKeyDown={escapeClose} onClick={overlayClose}>
+    <div className="main" tabIndex={0} onKeyDown={escapeClose} onClick={overlayClose}>
     <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
     <EditAvatarPopup onUpdateAvatar ={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
     <EditProfilePopup onUpdateUser ={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} /> 

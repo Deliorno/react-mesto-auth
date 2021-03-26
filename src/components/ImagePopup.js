@@ -1,4 +1,5 @@
 function ImagePopup(props){
+    //console.log(props.card)
     return(
         <div className={props.card ? 'popup popup_display_flex' : 'popup'} id="popup_image">
             <div className="popup__container">
