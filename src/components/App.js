@@ -1,5 +1,6 @@
 
 //import './App.css';
+import * as auth from '../utils/auth';
 import '../index.css';
 import Header from './Header.js';
 import '../index.css';
@@ -11,8 +12,13 @@ import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
 import ConfirmPopup from './ConfirmPopup.js';
+import Register from './Register.js';
+import Login from './Login.js';
+import InfoTooltip from './InfoTooltip.js';
+import ProtectedRoute from './ProtectedRoute.js';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 import React, { useEffect } from "react";
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 function App() {
     const [currentUser, setCurrentUser] = React.useState([]);
@@ -20,9 +26,14 @@ function App() {
     const [isAddPlacePopupOpen,setAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen,setEditAvatarPopupOpen] = React.useState(false);
     const [isConfirmPopupOpen,setConfirmPopupOpen] = React.useState(false);
+    const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState('');
     const [cardToDelete, setCardToDelete] = React.useState(null);
     const [cards, setCards] = React.useState([])
+    const [headerTitle, setHeaderTitle] = React.useState([]);
+    const [loggedIn, setLoggedIn] = React.useState(false);
+    const [tooltip, setTooltip] = React.useState(false);
+    const history = useHistory();
 
     useEffect(()=>{
         api.getData()
@@ -30,6 +41,34 @@ function App() {
                 setCards(cardsData);
             })
     },[]);
+
+    useEffect(()=>{
+        tokenCheck();
+    },[]);
+
+    function signOut(){
+        localStorage.removeItem('jwt');
+        history.push('/login');
+        console.log(localStorage)
+      }
+
+    function tokenCheck () {
+        // если у пользователя есть токен в localStorage,
+        // эта функция проверит валидность токена
+        const jwt = localStorage.getItem('jwt');
+        console.log(jwt)
+        if (jwt){
+          // проверим токен
+          auth.getToken(jwt)
+          .then((res) => {
+            if (res){
+                console.log('Авторизуем')
+                // авторизуем пользователя
+                setLoggedIn(true);
+            }
+          }); 
+        }
+      } 
 
     
     function handleCardLike(card) {
@@ -78,6 +117,7 @@ function App() {
         setAddPlacePopupOpen(false);
         setSelectedCard('');
         setConfirmPopupOpen(false);
+        setInfoTooltipOpen(false);
     }
 
     function handleEditAvatarClick(){
@@ -90,6 +130,43 @@ function App() {
 
     function handleAddPlaceClick(){
         setAddPlacePopupOpen(!isAddPlacePopupOpen)
+    }
+
+    React.useEffect(()=>{
+        console.log(loggedIn)
+        if (loggedIn){
+            history.push('/profile');
+            console.log("Переправка на профиль")
+        }
+    },[loggedIn])
+
+    function handleLogIn(password, email){
+        auth.logIn(password, email)
+        .then((data)=>{
+            if (data == 'Err'){
+                
+            } else {
+                //setTooltip(!tooltip)
+                //console.log(data.token)
+                localStorage.setItem('jwt', data.token);
+                setLoggedIn(true);
+                //console.log("эх",loggedIn)
+                history.push('/profile');
+            }
+        })
+    }
+
+    function handleRegistration(password, email){
+        //console.log(passwordInput, emailInput);
+        auth.register(password, email)
+            .then((data)=>{
+                if (data == 'Err'){
+                    setInfoTooltipOpen(true);
+                } else {
+                    setTooltip(!tooltip)
+                    setInfoTooltipOpen(true);
+                }
+            })
     }
 
     function handleUpdateUser(data){
@@ -140,16 +217,42 @@ function App() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Mesto</title>
     <div className="main" tabIndex={0} onKeyDown={escapeClose} onClick={overlayClose}>
-    <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
-    <EditAvatarPopup onUpdateAvatar ={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
-    <EditProfilePopup onUpdateUser ={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} /> 
-    <AddPlacePopup onAddPlaceSubmit ={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} /> 
-    <ConfirmPopup onSubmit={confirmDeleteCard} onClose={closeAllPopups} isOpen={isConfirmPopupOpen}/>
-    <Header />
-    <Main cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete} onCardClick={handleCardClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}/>
+        <Switch>
+     <Route exact path="/">
+        {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
+    </Route>   
+    <Route exact path="/profile">
+        {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
+        <Header title={"Выйти"} link='/sign-in' signOut={signOut}/>,
+        <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
+        <EditAvatarPopup onUpdateAvatar ={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
+        <EditProfilePopup onUpdateUser ={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} /> 
+        <AddPlacePopup onAddPlaceSubmit ={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
+        <ConfirmPopup onSubmit={confirmDeleteCard} onClose={closeAllPopups} isOpen={isConfirmPopupOpen}/>
+    </Route>  
+    <ProtectedRoute exact path="/profile" loggedIn={loggedIn} component={Main}
+         cards={cards} 
+         onCardLike={handleCardLike} 
+         onCardDelete={handleCardDelete} 
+         onCardClick={handleCardClick} 
+         onEditProfile={handleEditProfileClick} 
+         onAddPlace={handleAddPlaceClick} 
+         onEditAvatar={handleEditAvatarClick}
+        />
+    <Route path="/sign-up">
+        <InfoTooltip isOk={tooltip} isOpen={isInfoTooltipOpen} onClose={closeAllPopups}/>
+        <Header title={'Войти'} link='/sign-in'/>
+        <Register onRegister={handleRegistration}/>
+    </Route>
+    <Route path="/sign-in">
+        <InfoTooltip isOk={tooltip} isOpen={isInfoTooltipOpen} onClose={closeAllPopups}/>
+        <Header title={'Регистрация'} link='/sign-up'/>
+        <Login onLogIn={handleLogIn}/>
+    </Route>
+    </Switch>
     <Footer />
-</div>
-</CurrentUserContext.Provider>
+    </div>
+    </CurrentUserContext.Provider>
   );
 }
 

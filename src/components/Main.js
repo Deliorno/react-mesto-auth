@@ -26,7 +26,7 @@ function Main(props){
                         )
                 })}
             </section>
-    </main>
+        </main>
     )
 }
 export default Main;

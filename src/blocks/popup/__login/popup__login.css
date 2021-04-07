@@ -1,0 +1,13 @@
+.popup__login{
+    font-size: 14px;
+    line-height: 17px;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    transition: 0.5s;
+}
+
+.popup__login:hover{
+    cursor:pointer;
+    opacity: 0.6;
+}

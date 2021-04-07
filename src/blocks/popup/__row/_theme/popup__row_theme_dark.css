@@ -1,0 +1,26 @@
+.popup__row_theme_dark{
+    background-color: black;
+    margin:15px 0 0 0;
+    padding-bottom:13px;
+    outline: none;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    border:none;
+    width:100%;
+    color:  #CCCCCC;
+    border-bottom: 2px solid #CCCCCC;
+}
+
+.popup__row_theme_dark::-webkit-input-placeholder {color:#CCCCCC}
+.popup__row_theme_dark::-moz-placeholder          {color:#CCCCCC}/* Firefox 19+ */
+.popup__row_theme_dark:-moz-placeholder           {color:#CCCCCC}/* Firefox 18- */
+.popup__row_theme_dark:-ms-input-placeholder      {color:#CCCCCC}
+
+@media screen and (max-width:500px){
+    .popup__row_theme_dark{
+        font-size: 14px;
+        line-height: 17px;
+    }
+}
