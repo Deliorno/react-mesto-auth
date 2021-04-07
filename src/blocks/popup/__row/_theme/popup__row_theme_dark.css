@@ -18,6 +18,15 @@
 .popup__row_theme_dark:-moz-placeholder           {color:#CCCCCC}/* Firefox 18- */
 .popup__row_theme_dark:-ms-input-placeholder      {color:#CCCCCC}
 
+.popup__row_theme_dark:-webkit-autofill,
+.popup__row_theme_dark:-webkit-autofill:hover, 
+.popup__row_theme_dark:-webkit-autofill:focus {
+    -webkit-text-fill-color: #CCCCCC;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+  
+}
+
 @media screen and (max-width:500px){
     .popup__row_theme_dark{
         font-size: 14px;

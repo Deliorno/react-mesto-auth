@@ -30,9 +30,10 @@ function App() {
     const [selectedCard, setSelectedCard] = React.useState('');
     const [cardToDelete, setCardToDelete] = React.useState(null);
     const [cards, setCards] = React.useState([])
-    const [headerTitle, setHeaderTitle] = React.useState([]);
+    //const [headerTitle, setHeaderTitle] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [tooltip, setTooltip] = React.useState(false);
+    const [email, setEmail] = React.useState(null);
     const history = useHistory();
 
     useEffect(()=>{
@@ -48,7 +49,8 @@ function App() {
 
     function signOut(){
         localStorage.removeItem('jwt');
-        history.push('/login');
+        setLoggedIn(false);
+        history.push('/sign-in');
         console.log(localStorage)
       }
 
@@ -56,13 +58,15 @@ function App() {
         // если у пользователя есть токен в localStorage,
         // эта функция проверит валидность токена
         const jwt = localStorage.getItem('jwt');
-        console.log(jwt)
+        //console.log('Токен',jwt)
         if (jwt){
           // проверим токен
           auth.getToken(jwt)
           .then((res) => {
             if (res){
-                console.log('Авторизуем')
+                setEmail(res.data.email)
+                //console.log('Валидный токен => Авторизуем')
+                //console.log('Авторизуем')
                 // авторизуем пользователя
                 setLoggedIn(true);
             }
@@ -133,17 +137,17 @@ function App() {
     }
 
     React.useEffect(()=>{
-        console.log(loggedIn)
+       // console.log('loggedIn ?',loggedIn)
         if (loggedIn){
             history.push('/profile');
-            console.log("Переправка на профиль")
+            //console.log("Переправка на профиль")
         }
-    },[loggedIn])
+    },[loggedIn, email])
 
     function handleLogIn(password, email){
         auth.logIn(password, email)
         .then((data)=>{
-            if (data == 'Err'){
+            if (data === 'Err'){
                 
             } else {
                 //setTooltip(!tooltip)
@@ -160,7 +164,7 @@ function App() {
         //console.log(passwordInput, emailInput);
         auth.register(password, email)
             .then((data)=>{
-                if (data == 'Err'){
+                if (data === 'Err'){
                     setInfoTooltipOpen(true);
                 } else {
                     setTooltip(!tooltip)
@@ -217,40 +221,38 @@ function App() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Mesto</title>
     <div className="main" tabIndex={0} onKeyDown={escapeClose} onClick={overlayClose}>
-        <Switch>
-     <Route exact path="/">
-        {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
-    </Route>   
-    <Route exact path="/profile">
-        {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
-        <Header title={"Выйти"} link='/sign-in' signOut={signOut}/>,
+        {loggedIn && <Header email={email} loggedIn={loggedIn} title={"Выйти"} link='/sign-in' signOut={signOut}/>}
         <ImagePopup onClose={closeAllPopups} card={selectedCard}/>
         <EditAvatarPopup onUpdateAvatar ={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
         <EditProfilePopup onUpdateUser ={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} /> 
         <AddPlacePopup onAddPlaceSubmit ={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
         <ConfirmPopup onSubmit={confirmDeleteCard} onClose={closeAllPopups} isOpen={isConfirmPopupOpen}/>
-    </Route>  
-    <ProtectedRoute exact path="/profile" loggedIn={loggedIn} component={Main}
-         cards={cards} 
-         onCardLike={handleCardLike} 
-         onCardDelete={handleCardDelete} 
-         onCardClick={handleCardClick} 
-         onEditProfile={handleEditProfileClick} 
-         onAddPlace={handleAddPlaceClick} 
-         onEditAvatar={handleEditAvatarClick}
-        />
-    <Route path="/sign-up">
-        <InfoTooltip isOk={tooltip} isOpen={isInfoTooltipOpen} onClose={closeAllPopups}/>
-        <Header title={'Войти'} link='/sign-in'/>
-        <Register onRegister={handleRegistration}/>
-    </Route>
-    <Route path="/sign-in">
-        <InfoTooltip isOk={tooltip} isOpen={isInfoTooltipOpen} onClose={closeAllPopups}/>
-        <Header title={'Регистрация'} link='/sign-up'/>
-        <Login onLogIn={handleLogIn}/>
-    </Route>
-    </Switch>
-    <Footer />
+        <Switch>
+                <Route exact path="/">
+                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
+                </Route> 
+                <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Main}
+                    cards={cards} 
+                    onCardLike={handleCardLike} 
+                    onCardDelete={handleCardDelete} 
+                    onCardClick={handleCardClick} 
+                    onEditProfile={handleEditProfileClick} 
+                    onAddPlace={handleAddPlaceClick} 
+                    onEditAvatar={handleEditAvatarClick}
+                    />
+                <Route path="/sign-up">
+                    <InfoTooltip isOk={tooltip} isOpen={isInfoTooltipOpen} onClose={closeAllPopups}/>
+                    <Header title={'Войти'} link='/sign-in'/>
+                    <Register onRegister={handleRegistration}/>
+                </Route>
+                <Route path="/sign-in">
+                    <InfoTooltip isOk={tooltip} isOpen={isInfoTooltipOpen} onClose={closeAllPopups}/>
+                    <Header title={'Регистрация'} link='/sign-up'/>
+                    <Login onLogIn={handleLogIn}/>
+                </Route>
+        </Switch>
+        <Footer />
+
     </div>
     </CurrentUserContext.Provider>
   );
