@@ -1,9 +1,4 @@
 function PopupWithForm(props){
-    // function validation(props){
-    //     //const from = document.queryCommandEnabled({props.name})
-    //     //console.log('Что-то произошло')
-    //    // form.checkValidity();
-    // }
     return(
         <>
             <div className={props.isOpen ? 'popup popup_display_flex' : 'popup'}>

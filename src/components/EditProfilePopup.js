@@ -18,12 +18,12 @@ function EditProfilePopup(props){
         setDescription(currentUser.about);
       }, [currentUser]); 
 
-    React.useEffect(() => {
-        function fromValidity(){
-            setIsValid(nameErrorMessage.isValid && jobErrorMessage.isValid)
-        }
+    function setFormValid(){
+        setIsValid(nameErrorMessage.isValid && jobErrorMessage.isValid)
+    }
 
-        fromValidity()
+    React.useEffect(() => {
+        setFormValid()
       }, [nameErrorMessage,jobErrorMessage])
 
     React.useEffect(() => {
@@ -36,12 +36,12 @@ function EditProfilePopup(props){
         resetFields()
       }, [props.isOpen])
 
-    function handleNameChange(e) {
+    function setNameErrMessage(e) {
     //setName(e.target.value);
     setNameErrorMessage({errorMessage:e.target.validationMessage, isValid:e.target.checkValidity()})
    // fromValidity()
 }
-function handleAboutChange(e) {
+function setAboutErrMessage(e) {
     //setDescription(e.target.value);
     setJobErrorMessage({errorMessage:e.target.validationMessage, isValid:e.target.checkValidity()})
 }
@@ -59,11 +59,11 @@ function handleSubmit(e){
 return(
 <PopupWithForm isValid={isValid} onSubmit={handleSubmit} onClose={props.onClose} isOpen={props.isOpen} name="editProfile" title="Редактировать профиль">
             <div className="popup__field">
-                <input ref={nameRef} className="popup__row" name="name" type="text" minLength="2" maxLength="40" required id="name" defaultValue={name} onChange={handleNameChange} placeholder="Ваше имя"/>
+                <input ref={nameRef} className="popup__row" name="name" type="text" minLength="2" maxLength="40" required id="name" defaultValue={name} onChange={setNameErrMessage} placeholder="Ваше имя"/>
                 <span className="popup__row-error_active name-error">{nameErrorMessage.errorMessage}</span>
             </div>
             <div className="popup__field">
-                <input ref={aboutRef} className="popup__row" name="about" type="text" id="job" minLength="2" required maxLength="200" defaultValue={description} onChange={handleAboutChange} placeholder="Чем занимаетесь?"/>
+                <input ref={aboutRef} className="popup__row" name="about" type="text" id="job" minLength="2" required maxLength="200" defaultValue={description} onChange={setAboutErrMessage} placeholder="Чем занимаетесь?"/>
                 <span className="popup__row-error_active job-error">{jobErrorMessage.errorMessage}</span>
             </div>
 </PopupWithForm>

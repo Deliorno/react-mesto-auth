@@ -137,10 +137,10 @@ function App() {
     }
 
     React.useEffect(()=>{
-       // console.log('loggedIn ?',loggedIn)
+        //console.log('loggedIn ?',loggedIn)
         if (loggedIn){
             history.push('/profile');
-            //console.log("Переправка на профиль")
+            console.log("Переправка на профиль")
         }
     },[loggedIn, email])
 
@@ -148,7 +148,6 @@ function App() {
         auth.logIn(password, email)
         .then((data)=>{
             if (data === 'Err'){
-                
             } else {
                 //setTooltip(!tooltip)
                 //console.log(data.token)
@@ -165,10 +164,12 @@ function App() {
         auth.register(password, email)
             .then((data)=>{
                 if (data === 'Err'){
+                    setTooltip(false)
                     setInfoTooltipOpen(true);
                 } else {
-                    setTooltip(!tooltip)
+                    setTooltip(true)
                     setInfoTooltipOpen(true);
+                    history.push('/sign-in');
                 }
             })
     }

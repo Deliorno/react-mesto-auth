@@ -15,11 +15,12 @@ const [placeErrorMessage, setPlaceErrorMessage] = React.useState({errorMessage:'
 const [linkErrorMessage, setLinkErrorMessage] = React.useState({errorMessage:'', isValid:false});
 const [isValid, setIsValid] = React.useState(false);
 
-    React.useEffect(() => {
-        function fromValidity(){
-            setIsValid(placeErrorMessage.isValid && linkErrorMessage.isValid);
+    function setFormValid(){
+        setIsValid(placeErrorMessage.isValid && linkErrorMessage.isValid);
     }
-      fromValidity()
+
+    React.useEffect(() => {
+    setFormValid()
 
     }, [placeErrorMessage, linkErrorMessage])
 
@@ -34,7 +35,7 @@ const [isValid, setIsValid] = React.useState(false);
         resetFields()
       }, [props.isOpen])
 
-    function handleAddCard(){
+    function setErrMessage(){
         setPlaceErrorMessage({errorMessage:place.current.validationMessage, isValid:place.current.checkValidity()})
         setLinkErrorMessage({errorMessage:link.current.validationMessage, isValid:link.current.checkValidity()})
     }
@@ -42,11 +43,11 @@ const [isValid, setIsValid] = React.useState(false);
 return(
     <PopupWithForm isValid={isValid} onSubmit={handleSubmit} onClose={props.onClose} isOpen={props.isOpen} name="addCard" title="Новое место">
             <div className="popup__field">
-                <input onChange={handleAddCard} ref={place} className="popup__row" type="text" minLength="2" maxLength="30" name="place" id="place"  placeholder="Название" required/>
+                <input onChange={setErrMessage} ref={place} className="popup__row" type="text" minLength="2" maxLength="30" name="place" id="place"  placeholder="Название" required/>
                 <span className="popup__row-error_active place-error">{placeErrorMessage.errorMessage}</span>
             </div>
             <div className="popup__field">
-                <input onChange={handleAddCard} ref={link} className="popup__row" type="url" name="link" id="link"  placeholder="Ссылка на картинку" required/>
+                <input onChange={setErrMessage} ref={link} className="popup__row" type="url" name="link" id="link"  placeholder="Ссылка на картинку" required/>
                 <span className="popup__row-error_active link-error">{linkErrorMessage.errorMessage}</span>
             </div>
     </PopupWithForm>

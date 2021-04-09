@@ -6,12 +6,12 @@ function EditAvatarPopup(props){
     //console.log(props.isOpen)
   const avatar = React.useRef();
 
+  function setFormValid(){
+    //console.log(avatarErrorMessage.isValid,avatarErrorMessage.errorMessage)
+    setIsValid(avatarErrorMessage.isValid)
+  }
     React.useEffect(() => {
-      function fromValidity(){
-        //console.log(avatarErrorMessage.isValid,avatarErrorMessage.errorMessage)
-        setIsValid(avatarErrorMessage.isValid)
-    }
-      fromValidity()
+      setFormValid()
     }, [avatarErrorMessage])
 
     React.useEffect(() => {
@@ -29,14 +29,14 @@ function EditAvatarPopup(props){
         });
       }   
 
-      function handleAvatarChange(e) {
+      function setErrMessage(e) {
         setAvatarErrorMessage({errorMessage:e.target.validationMessage, isValid:e.target.checkValidity()})
     }
 
     return(
     <PopupWithForm isValid={isValid} onSubmit={handleSubmit} onClose={props.onClose} isOpen={props.isOpen} name="editAvatar" title="Обновить аватар">
             <div className="popup__field">
-                <input onChange={handleAvatarChange} ref={avatar} className="popup__row" type="url" name="link_avatar" id="avatar" required defaultValue="" placeholder="Сылка на изображение"/>
+                <input onChange={setErrMessage} ref={avatar} className="popup__row" type="url" name="link_avatar" id="avatar" required defaultValue="" placeholder="Сылка на изображение"/>
                 <span className="popup__row-error_active avatar-error">{avatarErrorMessage.errorMessage}</span>
             </div>  
     </PopupWithForm>
