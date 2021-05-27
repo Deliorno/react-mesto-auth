@@ -139,8 +139,8 @@ function App() {
     React.useEffect(()=>{
         //console.log('loggedIn ?',loggedIn)
         if (loggedIn){
-            history.push('/profile');
             console.log("Переправка на профиль")
+            history.push('/profile');
         }
     },[loggedIn, email])
 
