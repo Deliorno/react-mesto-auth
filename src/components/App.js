@@ -37,12 +37,12 @@ function App() {
     const history = useHistory();
 
     useEffect(()=>{
+        console.log(loggedIn);
         api.getData()
             .then((cardsData)=> {
                 setCards(cardsData);
             })
     },[]);
-
     useEffect(()=>{
         tokenCheck();
     },[]);
