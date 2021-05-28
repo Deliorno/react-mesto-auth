@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.deliorno.mesto-react.nomoredomains.icu';
 
 const handleOriginalResponse = (response) => {
   if (response.ok){
