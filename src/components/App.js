@@ -137,7 +137,7 @@ function App() {
     }
 
     React.useEffect(()=>{
-        //console.log('loggedIn ?',loggedIn)
+        console.log('loggedIn ?',loggedIn)
         if (loggedIn){
             console.log("Переправка на профиль")
             history.push('/profile');
