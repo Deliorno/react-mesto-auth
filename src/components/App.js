@@ -230,7 +230,7 @@ function App() {
         <ConfirmPopup onSubmit={confirmDeleteCard} onClose={closeAllPopups} isOpen={isConfirmPopupOpen}/>
         <Switch>
                 <Route exact path="/">
-                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-up" />}
+                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
                 </Route> 
                 <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Main}
                     cards={cards} 
