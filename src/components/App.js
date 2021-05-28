@@ -36,13 +36,13 @@ function App() {
     const [email, setEmail] = React.useState(null);
     const history = useHistory();
 
-    useEffect(()=>{
-        console.log(loggedIn);
-        api.getData()
-            .then((cardsData)=> {
-                setCards(cardsData);
-            })
-    },[]);
+    // useEffect(()=>{
+    //     api.getData()
+    //         .then((cardsData)=> {
+    //             setCards(cardsData);
+    //         })
+    // },[]);
+
     useEffect(()=>{
         tokenCheck();
     },[]);
