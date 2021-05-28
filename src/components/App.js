@@ -36,13 +36,13 @@ function App() {
     const [email, setEmail] = React.useState(null);
     const history = useHistory();
 
-    // useEffect(()=>{
-    //     api.getData()
-    //         .then((cardsData)=> {
-    //             setCards(cardsData);
-    //         })
-    // },[]);
-
+    useEffect(()=>{
+        api.getData()
+            .then((cardsData)=> {
+                setCards(cardsData);
+            })
+    },[]);
+    
     useEffect(()=>{
         tokenCheck();
     },[]);
@@ -137,7 +137,7 @@ function App() {
     }
 
     React.useEffect(()=>{
-        console.log('loggedIn ?',loggedIn)
+        //console.log('loggedIn ?',loggedIn)
         if (loggedIn){
             console.log("Переправка на профиль")
             history.push('/profile');
@@ -230,7 +230,7 @@ function App() {
         <ConfirmPopup onSubmit={confirmDeleteCard} onClose={closeAllPopups} isOpen={isConfirmPopupOpen}/>
         <Switch>
                 <Route exact path="/">
-                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
+                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-up" />}
                 </Route> 
                 <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Main}
                     cards={cards} 
