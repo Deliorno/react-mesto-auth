@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3005';
+export const BASE_URL = 'api.deliorno.mesto-react.nomoredomains.icu';
 //debugger;
 const handleOriginalResponse = (response) => {
   //console.log(response);
