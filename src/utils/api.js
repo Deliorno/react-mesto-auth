@@ -1,6 +1,16 @@
+import * as auth from "./auth";
+
+let token = "";
+const jwt = localStorage.getItem('jwt');
+auth.getToken(jwt)
+  .then((res) => {
+    //console.log(res)
+    token = res;
+  });
+
 const handleOriginalResponse = (res) => {
+        //console.log(res)
         if (res.ok){
-            //console.log(res)
             return res.json();  
         }
         return Promise.reject(`Ошибка: ${res.status}`)
@@ -11,34 +21,43 @@ const handleOriginalResponse = (res) => {
 class Api {
     constructor() {
       //super(props);
-        this._urlCards = "https://api.deliorno.mesto-react.nomoredomains.icu/cards/";
-        this._urlUserInfo = "https://api.deliorno.mesto-react.nomoredomains.icu/users/me/";
-        this._headers = {
-            'content-type': 'application/json',
-            'authorization':'cc284eaa-be85-4547-943e-099c0aa22925'
-          };
+        this._urlCards = "http://localhost:3005/cards";
+        this._urlUserInfo = "http://localhost:3005/users/me";
+        // this._headers = {
+        //     'content-type': 'application/json',
+        //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        //   };
     }
 
-    getData(){
+    getData(token){
        return fetch(this._urlCards, {
             method: 'GET',
-            headers: this._headers
+            headers: {
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
         })
         .then(handleOriginalResponse)
     }
 
-    getUserInfo(){
+    getUserInfo(token){
         return fetch(this._urlUserInfo, {
              method: 'GET',
-             headers: this._headers
+             headers: {
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
          })
          .then(handleOriginalResponse)
      }
 
-     setUserInfo(data){
+     setUserInfo(data, token){
         return fetch(this._urlUserInfo, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: {
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({
               name: data.name,
               about: data.about
@@ -47,10 +66,13 @@ class Api {
           .then(handleOriginalResponse)
      }
 
-     addNewCard(data){
+     addNewCard(data,token){
         return fetch(this._urlCards, {
             method: 'POST',
-            headers: this._headers,
+            headers: {
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({
               name: data.place,
               link: data.link
@@ -59,34 +81,46 @@ class Api {
           .then(handleOriginalResponse)
      }
 
-     changeLikeCardStatus(cardId, isLiked){
+     changeLikeCardStatus(cardId, isLiked,token){
          if(isLiked){
-            return fetch(`${this._urlCards}likes/${cardId}`, {
+            return fetch(`${this._urlCards}/${cardId}/likes`, {
                 method: 'PUT',
-                headers: this._headers
+                headers: {
+                  'content-type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                }
               }) 
               .then(handleOriginalResponse)
          } else {
-            return fetch(`${this._urlCards}likes/${cardId}`, {
+            return fetch(`${this._urlCards}/${cardId}/likes`, {
                 method: 'DELETE',
-                headers: this._headers
+                headers: {
+                  'content-type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                }
               }) 
               .then(handleOriginalResponse)
          }
      }
 
-     deleteCard(cardId){
-        return fetch(`${this._urlCards}${cardId}`, {
+     deleteCard(cardId,token){
+        return fetch(`${this._urlCards}/${cardId}`, {
             method: 'DELETE',
-            headers: this._headers
+            headers: {
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
           }) 
           .then(handleOriginalResponse)
      }
 
-     addAvatar(link){
-        return fetch(`${this._urlUserInfo}avatar`, {
+     addAvatar(link,token){
+        return fetch(`${this._urlUserInfo}/avatar`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: {
+              'content-type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify({
               avatar: link,
             })

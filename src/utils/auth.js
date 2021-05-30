@@ -1,9 +1,10 @@
-export const BASE_URL = 'https://api.deliorno.mesto-react.nomoredomains.icu';
-
+export const BASE_URL = 'http://localhost:3005';
+//debugger;
 const handleOriginalResponse = (response) => {
+  //console.log(response);
   if (response.ok){
     //console.log(response);  
-  return (response.json());
+    return (response.json());
 } else {
     console.log('Ошибка');
     Promise.reject(`Ошибка: ${response.status}`)

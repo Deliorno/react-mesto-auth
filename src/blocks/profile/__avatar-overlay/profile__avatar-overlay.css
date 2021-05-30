@@ -5,10 +5,6 @@
     border-radius: 100%;
     display: block;
     margin:0;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
     z-index: 1;
     transition: 0.7s;
 }
@@ -21,9 +17,5 @@
     opacity: 0.8;
     margin:0;
     display: block;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
     z-index: 1;
     }

@@ -13,10 +13,11 @@ function EditProfilePopup(props){
     const nameRef = React.useRef();
     const aboutRef = React.useRef();
 
-    React.useEffect(() => {
-        setName(currentUser.name);
-        setDescription(currentUser.about);
-      }, [currentUser]); 
+     React.useEffect(() => {
+         console.log(currentUser)
+         setName(currentUser.name);
+         setDescription(currentUser.about);
+       }, [currentUser]); 
 
     function setFormValid(){
         setIsValid(nameErrorMessage.isValid && jobErrorMessage.isValid)

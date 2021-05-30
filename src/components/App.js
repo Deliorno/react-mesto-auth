@@ -34,14 +34,19 @@ function App() {
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [tooltip, setTooltip] = React.useState(false);
     const [email, setEmail] = React.useState(null);
+    const [jwt, setJwt] = React.useState('');
     const history = useHistory();
 
     useEffect(()=>{
-        api.getData()
-            .then((cardsData)=> {
-                setCards(cardsData);
-            })
-    },[]);
+        if (loggedIn){
+            api.getData(localStorage.getItem('jwt'))
+                .then((cardsData)=> {
+                    //console.log(cardsData)
+                    setCards(cardsData.data);
+                })
+        }
+        console.log(cards)
+    },[loggedIn]);
     
     useEffect(()=>{
         tokenCheck();
@@ -51,23 +56,28 @@ function App() {
         localStorage.removeItem('jwt');
         setLoggedIn(false);
         history.push('/sign-in');
-        console.log(localStorage)
+        //console.log(localStorage)
       }
 
     function tokenCheck () {
         // если у пользователя есть токен в localStorage,
         // эта функция проверит валидность токена
         const jwt = localStorage.getItem('jwt');
-        //console.log('Токен',jwt)
+        console.log('Токен',jwt)
         if (jwt){
+            setJwt(jwt);
           // проверим токен
           auth.getToken(jwt)
           .then((res) => {
+            console.log(res)
             if (res){
+                //console.log(res)
                 setEmail(res.data.email)
+
                 //console.log('Валидный токен => Авторизуем')
                 //console.log('Авторизуем')
                 // авторизуем пользователя
+
                 setLoggedIn(true);
             }
           }); 
@@ -77,12 +87,13 @@ function App() {
     
     function handleCardLike(card) {
         // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        const isLiked = card.likes.some(i => i === currentUser._id);
+        //console.log(isLiked)
         // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isLiked)
+        api.changeLikeCardStatus(card._id, !isLiked,localStorage.getItem('jwt'))
         .then((newCard) => {
-            console.log(newCard);
-            const newCards = cards.map((c) => c._id === card._id ? newCard : c)
+            //console.log(newCard.data);
+            const newCards = cards.map((c) => c._id === card._id ? newCard.data : c)
             setCards(newCards)
             });
     } 
@@ -94,7 +105,7 @@ function App() {
 
     function confirmDeleteCard(e){
         e.preventDefault();
-         api.deleteCard(cardToDelete._id)
+         api.deleteCard(cardToDelete._id,localStorage.getItem('jwt'))
         .then((resp) => {
             const newCards = cards.filter(cardR => cardR._id !== cardToDelete._id);
             setCards(newCards);
@@ -103,11 +114,16 @@ function App() {
     }
 
     useEffect(()=>{
-        api.getUserInfo()
-        .then((userInfo)=> {
-           setCurrentUser(userInfo);
-        })
-   },[])
+        if (loggedIn){
+            api.getUserInfo(localStorage.getItem('jwt'))
+            .then((userInfo)=> {
+                //console.log(userInfo);
+                setCurrentUser(userInfo.data);
+                setEmail(userInfo.data.email)
+            })
+        }
+    },[loggedIn])
+
 
    //console.log(currentUser);
 
@@ -151,7 +167,9 @@ function App() {
             } else {
                 //setTooltip(!tooltip)
                 //console.log(data.token)
+                //console.log(data.token)
                 localStorage.setItem('jwt', data.token);
+                setJwt(jwt);
                 setLoggedIn(true);
                 //console.log("эх",loggedIn)
                 history.push('/profile');
@@ -175,25 +193,26 @@ function App() {
     }
 
     function handleUpdateUser(data){
-        api.setUserInfo(data)
+        api.setUserInfo(data,localStorage.getItem('jwt'))
         .then((resp)=> {
-            setCurrentUser(resp);
+            console.log(resp)
+            setCurrentUser(resp.data);
             closeAllPopups()})
     }
 
     function handleUpdateAvatar(data){
-        api.addAvatar(data.avatar).then((resp)=> {
-            //console.log(resp);
-            setCurrentUser(resp)
+        api.addAvatar(data.avatar,localStorage.getItem('jwt')).then((resp)=> {
+            console.log(resp);
+            setCurrentUser(resp.data)
             closeAllPopups();
         })
     }
 
     function handleAddPlaceSubmit(data){
-        api.addNewCard(data)
+        api.addNewCard(data,localStorage.getItem('jwt'))
         .then((resp)=>{
-            //console.log(resp);
-            setCards([resp, ...cards]);
+            console.log(resp);
+            setCards([resp.data, ...cards]);
             closeAllPopups();
         })
     }
@@ -230,7 +249,7 @@ function App() {
         <ConfirmPopup onSubmit={confirmDeleteCard} onClose={closeAllPopups} isOpen={isConfirmPopupOpen}/>
         <Switch>
                 <Route exact path="/">
-                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/si" />}
+                    {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
                 </Route> 
                 <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Main}
                     cards={cards} 
