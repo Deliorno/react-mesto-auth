@@ -47,6 +47,17 @@ function App() {
         }
         console.log(cards)
     },[loggedIn]);
+
+    useEffect(()=>{
+        if (loggedIn){
+            api.getUserInfo(localStorage.getItem('jwt'))
+            .then((userInfo)=> {
+                //console.log(userInfo);
+                setCurrentUser(userInfo.data);
+                setEmail(userInfo.data.email)
+            })
+        }
+    },[loggedIn])
     
     useEffect(()=>{
         tokenCheck();
@@ -112,20 +123,6 @@ function App() {
             closeAllPopups();
             });
     }
-
-    useEffect(()=>{
-        if (loggedIn){
-            api.getUserInfo(localStorage.getItem('jwt'))
-            .then((userInfo)=> {
-                //console.log(userInfo);
-                setCurrentUser(userInfo.data);
-                setEmail(userInfo.data.email)
-            })
-        }
-    },[loggedIn])
-
-
-   //console.log(currentUser);
 
     function handleCardClick (selectedCard){
         setSelectedCard(selectedCard)
