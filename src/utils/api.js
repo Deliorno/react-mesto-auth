@@ -21,8 +21,8 @@ const handleOriginalResponse = (res) => {
 class Api {
     constructor() {
       //super(props);
-        this._urlCards = "https://api.deliorno.mesto-react.nomoredomains.icu/cards";
-        this._urlUserInfo = "https://api.deliorno.mesto-react.nomoredomains.icu/users/me";
+        this._urlCards = "https://deliorno.mesto-react.nomoredomains.icu";
+        this._urlUserInfo = "https://deliorno.mesto-react.nomoredomains.icu";
         // this._headers = {
         //     'content-type': 'application/json',
         //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
