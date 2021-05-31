@@ -76,7 +76,6 @@ function App() {
         const jwt = localStorage.getItem('jwt');
         console.log('Токен',jwt)
         if (jwt){
-            setJwt(jwt);
           // проверим токен
           auth.getToken(jwt)
           .then((res) => {

@@ -1,13 +1,3 @@
-import * as auth from "./auth";
-
-let token = "";
-const jwt = localStorage.getItem('jwt');
-auth.getToken(jwt)
-  .then((res) => {
-    //console.log(res)
-    token = res;
-  });
-
 const handleOriginalResponse = (res) => {
         //console.log(res)
         if (res.ok){
@@ -21,8 +11,8 @@ const handleOriginalResponse = (res) => {
 class Api {
     constructor() {
       //super(props);
-        this._urlCards = "https://deliorno.mesto-react.nomoredomains.icu/cards";
-        this._urlUserInfo = "https://deliorno.mesto-react.nomoredomains.icu/users/me";
+        this._urlCards = "https://api.deliorno.mesto-react.nomoredomains.icu/cards";
+        this._urlUserInfo = "https://api.deliorno.mesto-react.nomoredomains.icu/users/me";
         // this._headers = {
         //     'content-type': 'application/json',
         //     'Authorization': `Bearer ${localStorage.getItem('jwt')}`
