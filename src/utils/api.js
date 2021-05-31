@@ -1,5 +1,5 @@
 const handleOriginalResponse = (res) => {
-        //console.log(res)
+        console.log(res)
         if (res.ok){
             return res.json();  
         }
